@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据集介绍</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .data-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .data-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .data-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .field-table th, .field-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 18px;
+        }
+        .field-table th {
+            background: #3498db;
+            color: white;
+        }
+        .field-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .download-btn {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>数据集介绍</h1>
+        <p class="description">化合物毒性数据集详细信息</p>
+    </div>
+
+    <div class="navbar">
+        <div class="navbar-right">
+            <a href="/" class="right">主页</a>
+            <a href="/search" class="right">搜索</a>
+            <a href="/toxicity_search" class="right">毒性特征筛选</a>
+            <a href="/toxicity_prediction" class="right">毒性预测</a>
+            <a href="/data_collection" class="right active">数据收集</a>
+        </div>
+    </div>
+
+    <div class="data-container">
+        <div class="data-section">
+            <h2>数据集概述</h2>
+            <p>本数据集包含了大量化合物的毒性相关信息，这些数据经过精心收集和整理，可用于毒性预测和分析研究。数据来源包括公开数据库、文献记录等多个渠道，确保了数据的可靠性和多样性。</p>
+            
+            <div class="data-stats">
+                <div class="stat-card">
+                    <div class="stat-number">110816</div>
+                    <div>化合物数量</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">16</div>
+                    <div>毒性特征数量</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div>数据字段数量</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <h2>数据字段说明</h2>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>字段名</th>
+                        <th>说明</th>
+                        <th>数据类型</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>化合物通用名称</td>
+                        <td>文本</td>
+                    </tr>
+                    <tr>
+                        <td>IUPAC_Name</td>
+                        <td>化合物的IUPAC命名</td>
+                        <td>文本</td>
+                    </tr>
+                    <tr>
+                        <td>PubChem_CID</td>
+                        <td>PubChem数据库中的化合物ID</td>
+                        <td>数值</td>
+                    </tr>
+                    <tr>
+                        <td>Canonical_SMILES</td>
+                        <td>标准化的SMILES分子结构表示</td>
+                        <td>文本</td>
+                    </tr>
+                    <tr>
+                        <td>InChIKey</td>
+                        <td>国际化学标识符哈希值</td>
+                        <td>文本</td>
+                    </tr>
+                    <tr>
+                        <td>Toxicity_Values</td>
+                        <td>各种毒性指标的数值</td>
+                        <td>数值</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="data-section">
+            <h2>数据下载</h2>
+            <p>您可以下载完整的数据集用于研究目的。数据集以CSV格式提供，包含所有化合物的详细信息。</p>
+            <a href="/download_dataset" class="download-btn">下载数据集</a>
+        </div>
+    </div>
+</body>
+</html>

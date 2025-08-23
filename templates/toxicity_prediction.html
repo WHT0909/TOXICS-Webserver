@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毒性预测</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .prediction-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .input-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .input-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .file-upload:hover {
+            background: #e9ecef;
+        }
+        .file-upload-icon {
+            font-size: 48px;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        .file-upload-text {
+            color: #6c757d;
+        }
+        .smiles-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background: #45a049;
+        }
+        .prediction-tips {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #6c757d;
+        }
+        .prediction-tips p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab-btn.active {
+            background: white;
+            border-bottom: 2px solid white;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 0 5px 5px 5px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f8f9fa;
+            display: none;
+        }
+        .result-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .result-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toxicity-level {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .level-low {
+            background: #d4edda;
+            color: #155724;
+        }
+        .level-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .level-high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>毒性预测</h1>
+        <p class="description">基于化合物结构预测潜在毒性</p>
+    </div>
+
+    <div class="navbar">
+        <div class="navbar-right">
+            <a href="/" class="right">主页</a>
+            <a href="/search" class="right">搜索</a>
+            <a href="/toxicity_search" class="right">毒性特征筛选</a>
+            <a href="/toxicity_prediction" class="right active">毒性预测</a>
+            <a href="/data_collection" class="right">数据收集</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="section">
+            <h2>化合物毒性预测</h2>
+            <div class="prediction-container">
+                <form id="prediction-form" action="/predict_toxicity" method="POST" enctype="multipart/form-data">
+                    <div class="tab-container">
+                        <div class="tab-buttons">
+                            <div class="tab-btn active" data-tab="smiles-tab">SMILES输入</div>
+                            <div class="tab-btn" data-tab="file-tab">文件上传</div>
+                        </div>
+                        
+                        <div id="smiles-tab" class="tab-content active">
+                            <div class="input-section">
+                                <h3>输入SMILES序列</h3>
+                                <textarea name="smiles_input" class="smiles-input" rows="5" placeholder="在此输入SMILES序列，例如：CC(=O)OC1=CC=CC=C1C(=O)O（阿司匹林）"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div id="file-tab" class="tab-content">
+                            <div class="input-section">
+                                <h3>上传.smi文件</h3>
+                                <label for="file-upload" class="file-upload">
+                                    <div class="file-upload-icon">📁</div>
+                                    <div class="file-upload-text">点击或拖拽文件到此处</div>
+                                    <input type="file" id="file-upload" name="smi_file" accept=".smi" style="display: none;">
+                                </label>
+                                <div id="file-name" style="text-align: center; margin-top: 10px; color: #6c757d;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <h3>预测模型</h3>
+                        <div style="width: 100%; padding: 15px; font-size: 16px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+                            综合毒性预测 (eToxPred)
+                        </div>
+                        <input type="hidden" name="model_type" value="etoxpred">
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">开始预测</button>
+                </form>
+                
+                <div class="loading" id="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    <p>正在进行预测，请稍候...</p>
+                </div>
+                
+                <div class="result-container" id="result-container">
+                    <div class="result-title">预测结果</div>
+                    <div id="prediction-results">
+                        <!-- 预测结果将在这里动态显示 -->
+                    </div>
+                </div>
+                
+                <div class="prediction-tips">
+                    <p>提示：预测结果仅供参考，实际毒性可能受多种因素影响。更准确的评估需要结合实验数据和专业判断。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 标签页切换
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // 移除所有活动状态
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // 设置当前标签为活动状态
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // 文件上传显示文件名
+            const fileUpload = document.getElementById('file-upload');
+            const fileName = document.getElementById('file-name');
+            
+            fileUpload.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileName.textContent = '已选择: ' + this.files[0].name;
+                } else {
+                    fileName.textContent = '';
+                }
+            });
+            
+            // 表单提交处理
+            const predictionForm = document.getElementById('prediction-form');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const resultContainer = document.getElementById('result-container');
+            const predictionResults = document.getElementById('prediction-results');
+            
+            predictionForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 显示加载指示器
+                loadingIndicator.style.display = 'block';
+                resultContainer.style.display = 'none';
+                
+                // 创建FormData对象
+                const formData = new FormData(this);
+                
+                // 发送AJAX请求
+                fetch('/predict_toxicity', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 隐藏加载指示器
+                    loadingIndicator.style.display = 'none';
+                    
+                    // 显示结果容器
+                    resultContainer.style.display = 'block';
+                    
+                    // 清空之前的结果
+                    predictionResults.innerHTML = '';
+                    
+                    // 处理并显示结果
+                    if (data.error) {
+                        predictionResults.innerHTML = `<div class="result-item" style="color: #721c24; background-color: #f8d7da;">${data.error}</div>`;
+                    } else {
+                        // 遍历结果并显示
+                        data.results.forEach(result => {
+                            let levelClass = '';
+                            if (result.probability < 0.3) {
+                                levelClass = 'level-low';
+                            } else if (result.probability < 0.7) {
+                                levelClass = 'level-medium';
+                            } else {
+                                levelClass = 'level-high';
+                            }
+                            
+                            const resultItem = document.createElement('div');
+                            resultItem.className = 'result-item';
+                            resultItem.innerHTML = `
+                                <div><strong>化合物:</strong> ${result.compound}</div>
+                                <div><strong>预测结果:</strong> ${result.prediction} 
+                                    <span class="toxicity-level ${levelClass}">
+                                        ${Math.round(result.probability * 100)}%
+                                    </span>
+                                </div>
+                                ${result.details ? `<div><strong>详细信息:</strong> ${result.details}</div>` : ''}
+                            `;
+                            // 移除了显示SAscore的代码
+                            
+                            predictionResults.appendChild(resultItem);
+                        });
+                    }
+                })
+                .catch(error => {
+                    // 隐藏加载指示器
+                    loadingIndicator.style.display = 'none';
+                    
+                    // 显示错误信息
+                    resultContainer.style.display = 'block';
+                    predictionResults.innerHTML = `<div class="result-item" style="color: #721c24; background-color: #f8d7da;">发生错误: ${error.message}</div>`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

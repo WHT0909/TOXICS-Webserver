@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toxicity Database</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<body>
+    <div class="header">
+        <h1>TOXICS</h1>
+        <p class="description">化合物/药物毒理学性质数据库</p>
+    </div>
+
+    <div class="navbar">
+        <div class="navbar-right">
+            <a href="/" class="right">主页</a>
+            <a href="/search" class="right">搜索</a>
+            <a href="/toxicity_search" class="right">毒性特征筛选</a>
+            <a href="/toxicity_prediction" class="right">毒性预测</a>
+            <a href="/data_collection" class="right">数据收集</a>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-icon">👤</div>
+            <div class="stat-number">110816</div>
+            <div class="stat-label">化合物</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🧪</div>
+            <div class="stat-number">16</div>
+            <div class="stat-label">毒性分类</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">📊</div>
+            <div class="stat-number">8</div>
+            <div class="stat-label">特征空间</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="section">
+            <h2>欢迎使用TOXICS数据库</h2>
+            <p>TOXICS是一个综合性的化合物和药物毒理学性质数据库，提供全面的毒性数据和分析工具。</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <h3>全面的化合物数据</h3>
+                    <p>包含超过10万种化合物的详细信息和毒理学特性。</p>
+                </div>
+                <div class="feature">
+                    <h3>多维度毒性分类</h3>
+                    <p>按照不同的毒性机制和靶器官进行分类，便于研究和分析。</p>
+                </div>
+                <div class="feature">
+                    <h3>强大的搜索功能</h3>
+                    <p>支持通过化合物名称、结构、CID等多种方式进行精确搜索。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>数据分布</h2>
+            <div class="charts-container" style="display: flex; justify-content: center; padding: 20px;">
+                <div class="chart" style="width: 600px;">
+                    <canvas id="toxicityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 TOXICS Database. All rights reserved.</p>
+    </div>
+
+    <script>
+        const toxicityData = {
+            labels: [
+                '急性毒性', '致癌性', '致突变性', '发育和生殖毒性', '肝毒性',
+                '心脏毒性', '呼吸道毒性', '内分泌干扰', '刺激和腐蚀',
+                '生态毒性', '临床毒性', 'ToxCast&Tox21项目', 'CYP450系列',
+                '光毒性', '皮肤毒性', '神经毒性'
+            ],
+            datasets: [{
+                label: '化合物数量',
+                data: [
+                    79725, 1021, 7485, 550, 2889,
+                    1547, 1348, 7675, 6080,
+                    2763, 1430, 5126, 16280,
+                    450, 545, 422
+                ],
+                backgroundColor: [
+                    '#60a5fa', '#818cf8', '#34d399', '#fcd34d', '#f87171',
+                    '#4ade80', '#38bdf8', '#fb923c', '#a78bfa',
+                    '#22d3ee', '#f472b6', '#facc15', '#10b981',
+                    '#c084fc', '#f97316', '#2dd4bf'
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+    
+        const toxicityOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                // title: {
+                //     display: true,
+                //     text: '化合物毒性类别分布',
+                //     font: {
+                //         size: 20,
+                //         weight: 'bold'
+                //     },
+                //     padding: {
+                //         top: 10,
+                //         bottom: 30
+                //     }
+                // },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            return `${label}: ${value.toLocaleString()} 个化合物`;
+                        }
+                    }
+                }
+            }
+        };
+    
+        const toxCtx = document.getElementById('toxicityChart').getContext('2d');
+        const toxChart = new Chart(toxCtx, {
+            type: 'pie',
+            data: toxicityData,
+            options: toxicityOptions
+        });
+    </script>    
+</body>
+</html>

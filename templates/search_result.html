@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毒性特征分析结果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .search-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .toxicity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+            display: block;
+        }
+        .toxicity-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .toxicity-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .feature-tag {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 3px 8px;
+            margin: 2px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .error-message {
+            color: #e74c3c;
+            padding: 15px;
+            background: #fdecea;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .no-results {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .compound-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        /* 添加工具提示样式，用于显示完整的SMILES和IUPAC名称 */
+        .cell-with-tooltip {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .cell-with-tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            z-index: 1;
+            max-width: 400px;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>毒性特征分析结果</h1>
+        
+        {% if error_message %}
+            <div class="error-message">
+                <strong>错误：</strong> {{ error_message }}
+            </div>
+            <a href="/search" class="back-btn">返回搜索</a>
+        {% else %}
+            <div class="search-info">
+                <p><strong>搜索字段：</strong> {{ search_field }}</p>
+                <p><strong>搜索关键词：</strong> {{ keyword }}</p>
+                <p><strong>找到记录：</strong> {{ count }} 条</p>
+            </div>
+
+            {% if count > 0 %}
+                <table class="toxicity-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>IUPAC_Name</th>
+                            <th>PubChem_CID</th>
+                            <th>Canonical_SMILES</th>
+                            <th>InChIKey</th>
+                            <th>检测到的毒性特征</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in toxicity_data %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td class="compound-name">{{ item.name }}</td>
+                            <td class="cell-with-tooltip" data-tooltip="{{ item.full_data.get('IUPAC_Name', '') }}">{{ item.full_data.get('IUPAC_Name', '') }}</td>
+                            <td>{{ item.full_data.get('PubChem_CID', '') | int }}</td>
+                            <td class="cell-with-tooltip" data-tooltip="{{ item.full_data.get('Canonical_SMILES', '') }}">{{ item.full_data.get('Canonical_SMILES', '') }}</td>
+                            <td>{{ item.full_data.get('InChIKey', '') }}</td>
+                            <td>
+                                {% if item.toxic_features %}
+                                    {% for feature in item.toxic_features %}
+                                        <span class="feature-tag">{{ feature }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span>未检测到毒性特征</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-results">
+                    未找到匹配的化合物记录
+                </div>
+            {% endif %}
+            
+            <a href="/search" class="back-btn">返回搜索</a>
+        {% endif %}
+    </div>
+</body>
+</html>
