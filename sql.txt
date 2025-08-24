@@ -1,0 +1,127 @@
+-- 建立数据库
+-- CREATE DATABASE IF NOT EXISTS toxics_web;
+USE toxics_web;
+-- 建立数据表结构
+-- CREATE TABLE IF NOT EXISTS toxics_main_table (
+--     `Unnamed_0` INT NULL,
+--     `ID` INT NOT NULL,
+--     `Name` VARCHAR(255) NULL,
+--     `IUPAC_Name` TEXT NULL,
+--     `PubChem_CID` TEXT NULL,
+--     `Canonical_SMILES` TEXT NULL,
+--     `InChIKey` VARCHAR(255) NULL,
+--     `ToxCast_Tox21_Assay` DOUBLE NULL,
+--     `Ecotoxicity_LC50DM` DOUBLE NULL,
+--     `Ecotoxicity_LC50` DOUBLE NULL,
+--     `Ecotoxicity_IGC50` DOUBLE NULL,
+--     `Ecotoxicity_BCF` DOUBLE NULL,
+--     `Clinical_Toxicity_Clinical_toxicity` DOUBLE NULL,
+--     `Hepatotoxicity_Hepatotoxicity` DOUBLE NULL,
+--     `Cardiotoxicity_Cardiotoxicity_1` DOUBLE NULL,
+--     `Cardiotoxicity_Cardiotoxicity_5` DOUBLE NULL,
+--     `Cardiotoxicity_Cardiotoxicity_10` DOUBLE NULL,
+--     `Cardiotoxicity_Cardiotoxicity_30` DOUBLE NULL,
+--     `Respiratory_Toxicity_Respiratory_Toxicity` DOUBLE NULL,
+--     `Endocrine_Disruption_NR_AR_LBD` DOUBLE NULL,
+--     `Endocrine_Disruption_NR_AR` DOUBLE NULL,
+--     `Endocrine_Disruption_NR_AhR` DOUBLE NULL,
+--     `Endocrine_Disruption_NR_aromatase` DOUBLE NULL,
+--     `Endocrine_Disruption_NR_ER_LBD` DOUBLE NULL,
+--     `Endocrine_Disruption_NR_ER` DOUBLE NULL,
+--     `Endocrine_Disruption_SR_ATAD5` DOUBLE NULL,
+--     `Endocrine_Disruption_SR_HSE` DOUBLE NULL,
+--     `Endocrine_Disruption_NR_PPAR_gamma` DOUBLE NULL,
+--     `Endocrine_Disruption_SR_MMP` DOUBLE NULL,
+--     `Endocrine_Disruption_SR_p53` DOUBLE NULL,
+--     `Endocrine_Disruption_SR_ARE` DOUBLE NULL,
+--     `Irritation_and_Corrosion_Eye_Irritation` DOUBLE NULL,
+--     `Irritation_and_Corrosion_Eye_Corrosion` DOUBLE NULL,
+--     `Acute_mammal_species_unspecified_intraperitoneal_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_guinea_pig_intraperitoneal_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_intraperitoneal_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rat_intraperitoneal_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_intraperitoneal_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_intraperitoneal_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_rat_intraperitoneal_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_intravenous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_guinea_pig_intravenous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rat_intravenous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_intravenous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_dog_intravenous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_cat_intravenous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_intravenous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_guinea_pig_intravenous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_rat_intravenous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_intravenous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_dog_intravenous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_cat_intravenous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mammal_species_unspecified_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_guinea_pig_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rat_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_dog_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_cat_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_bird_wild_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_quail_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_duck_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_chicken_oral_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_oral_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_rat_oral_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_oral_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_dog_oral_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_cat_oral_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_man_oral_TDLo` DOUBLE NULL,
+--     `Acute_Toxicity_women_oral_TDLo` DOUBLE NULL,
+--     `Acute_Toxicity_human_oral_TDLo` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_unreported_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mammal_species_unspecified_unreported_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rat_unreported_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_skin_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_guinea_pig_skin_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rat_skin_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_skin_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_skin_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_subcutaneous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mammal_species_unspecified_subcutaneous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_guinea_pig_subcutaneous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rat_subcutaneous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_subcutaneous_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_subcutaneous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_guinea_pig_subcutaneous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_rat_subcutaneous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_rabbit_subcutaneous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_frog_subcutaneous_LDLo` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_intramuscular_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_rat_intramuscular_LD50` DOUBLE NULL,
+--     `Acute_Toxicity_mouse_parenteral_LD50` DOUBLE NULL,
+--     `Carcinogenicity_Carcinogenicity` DOUBLE NULL,
+--     `Mutagenicity_Ames_Mutagenicity` DOUBLE NULL,
+--     `Developmental_and_Reproductive_Toxicity_Developmental_Toxicity` DOUBLE NULL,
+--     `Developmental_and_Reproductive_Toxicity_Reproductive_Toxicity` DOUBLE NULL,
+--     `CYP450` DOUBLE NULL,
+--     PRIMARY KEY (`ID`)
+-- );
+
+-- 执行命令查看secure_file_priv配置
+-- 若结果为某个路径（如E:\ProgramData\MySQL\MySQL Server 8.0\Uploads\），则 CSV 文件必须放在该目录下才能被导入。
+-- SHOW VARIABLES LIKE 'secure_file_priv';
+
+-- 导入CSV数据到toxics_main_table表，注意路径要用"\\"或者"/"
+-- LOAD DATA INFILE "E:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\total_compound_data_utf8_clean.csv"
+-- INTO TABLE toxics_main_table
+-- FIELDS TERMINATED BY ','  -- CSV字段分隔符为逗号
+-- ENCLOSED BY '"'           -- 字段值用双引号包裹
+-- LINES TERMINATED BY '\n'  -- 行分隔符为换行符
+-- IGNORE 1 ROWS;            -- 忽略CSV的表头行（第一行）
+
+-- 检查数据是否成功导入 应为110816
+-- SELECT COUNT(*) FROM toxics_main_table;
+
+-- 确认表的字段数量是否正确 应为97
+SELECT COUNT(*) FROM information_schema.columns
+WHERE table_schema = DATABASE() AND table_name = 'toxics_main_table';
+
+-- 删除 Unnamed_0 一列
+-- ALTER TABLE toxics_main_table
+-- DROP COLUMN Unnamed_0;

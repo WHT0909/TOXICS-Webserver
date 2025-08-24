@@ -4,7 +4,9 @@
 
 系统使用MySQL数据库直接连接，无需XAMPP。请按照以下步骤设置数据库：
 
-1. 安装MySQL数据库服务器（如果尚未安装）
+1. 安装MySQL数据库服务器（如果尚未安装），可以参考如下教程：<br>
+   [2024 年 MySQL 8.0 安装 配置 教程 最简易（保姆级）](https://blog.csdn.net/m0_52559040/article/details/121843945)<br>
+   [MySQL8.0版安装教程 + Workbench可视化配置教程（史上最细、一步一图解）](https://blog.csdn.net/m0_62881487/article/details/133202105)
 2. 创建名为`toxics_web`的数据库
 3. 在该数据库中创建`total_compound_data`表，包含以下字段：
    - id
@@ -15,43 +17,24 @@
    - inchikey
    - 其他相关字段
 
-4. 导入CSV数据：可以使用MySQL Workbench或命令行工具将`total_compound_data.CSV`导入到数据库表中
+4. 导入CSV数据：可以使用MySQL Workbench或命令行工具将`total_compound_data_utf8_clean.csv`导入到数据库表中
 
 ## 配置数据库连接
 
-数据库连接参数存储在`db_config.php`文件中，您可以根据自己的MySQL设置修改以下参数：
+Flask后端的数据库连接参数在 app.py 文件的DB_CONFIG字典中，您可以根据自己的MySQL设置修改以下参数：
 
-```php
-$servername = "localhost"; // MySQL服务器地址
-$username = "root";        // MySQL用户名
-$password = "";            // MySQL密码
-$dbname = "toxics_web";    // 数据库名称
-$table = "total_compound_data"; // 表名
+```flask
+DB_CONFIG = {
+    'host': 'localhost', 
+    'user': 'root',
+    'password': 'your_pwd',
+    'database': 'toxics_web'
+}
 ```
 
 ## 导入数据
 
-可以使用以下SQL命令创建表并导入数据：
-
-```sql
-CREATE TABLE total_compound_data (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255),
-  iupac_name TEXT,
-  pubchem_cid VARCHAR(50),
-  canonical_smiles TEXT,
-  inchikey VARCHAR(100),
-  -- 添加其他必要字段
-);
-
--- 使用LOAD DATA INFILE导入CSV数据
-LOAD DATA INFILE 'path_to_csv/total_compound_data.CSV' 
-INTO TABLE total_compound_data 
-FIELDS TERMINATED BY ',' 
-ENCLOSED BY '"' 
-LINES TERMINATED BY '\n' 
-IGNORE 1 ROWS;
-```
+sql.txt 文件提供了创建表并导入数据的具体命令
 
 ## 测试连接
 

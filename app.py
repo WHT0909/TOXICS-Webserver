@@ -15,8 +15,8 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': '12345',
-    'database': 'toxic_web'
+    'password': 'rewq54321a',
+    'database': 'toxics_web'
 }
 
 # 固定表名（移出DB_CONFIG）
