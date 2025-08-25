@@ -8,15 +8,19 @@ import os
 import tempfile
 from werkzeug.utils import secure_filename
 from toxicity_prediction import predict_toxicity, process_smi_file
+from dotenv import load_dotenv
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 
 # 数据库配置
+load_dotenv()
+
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'rewq54321a',
-    'database': 'toxics_web'
+    'host': os.getenv('DB_HOST'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'database': os.getenv('DB_NAME'),
+    'port': int(os.getenv('DB_PORT', 3306))  # 3306为默认值，防止未设置时出错
 }
 
 # 固定表名（移出DB_CONFIG）

@@ -1,4 +1,4 @@
-# 毒理学数据库系统 - 数据库设置指南
+# 毒理学数据库系统 - 数据库设置指南（本地部署版）
 
 ## 数据库配置
 
@@ -8,7 +8,7 @@
    [2024 年 MySQL 8.0 安装 配置 教程 最简易（保姆级）](https://blog.csdn.net/m0_52559040/article/details/121843945)<br>
    [MySQL8.0版安装教程 + Workbench可视化配置教程（史上最细、一步一图解）](https://blog.csdn.net/m0_62881487/article/details/133202105)
 2. 创建名为`toxics_web`的数据库
-3. 在该数据库中创建`total_compound_data`表，包含以下字段：
+3. 在该数据库中创建`toxics_main_table`表，包含以下字段：
    - id
    - name
    - iupac_name
@@ -21,17 +21,14 @@
 
 ## 配置数据库连接
 
-Flask后端的数据库连接参数在 app.py 文件的DB_CONFIG字典中，您可以根据自己的MySQL设置修改以下参数：
+Flask后端的数据库连接参数 .env 文件中，您可以根据自己的MySQL设置修改以下参数：
 
-```flask
-DB_CONFIG = {
-    'host': 'localhost', 
-    'user': 'root',
-    'password': 'your_pwd',
-    'database': 'toxics_web'
-}
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_pwd
+DB_NAME=toxics_web
 ```
-
 ## 导入数据
 
 sql.txt 文件提供了创建表并导入数据的具体命令
