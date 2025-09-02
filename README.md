@@ -1,5 +1,9 @@
 # TOXICS Webserver 项目总文档
 
+<p align="center">
+  <img src="Logo_img/TOXICS_Logo.png" alt="TOXICS Logo" width="500">
+</p>
+
 ## 项目概述
 TOXICS Webserver 是一个药物毒理学性质数据库构建与挖掘系统，提供化合物毒性信息查询、毒性特征搜索和毒性预测等功能。该系统集成了数据库技术、机器学习和 cheminformatics 方法，为药物研发和毒理学研究提供支持。
 
