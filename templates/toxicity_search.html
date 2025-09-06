@@ -41,9 +41,15 @@
             font-size: 18px;
             cursor: pointer;
             width: 100%;
+            transition: all 0.3s ease;
         }
-        button[type="submit"]:hover {
+        button[type="submit"]:hover:not(:disabled) {
             background: #45a049;
+        }
+        button[type="submit"]:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
         }
         .search-tips {
             margin-top: 20px;
@@ -59,6 +65,36 @@
         }
         .hidden {
             display: none;
+        }
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: #4CAF50;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -82,13 +118,13 @@
         <div class="section">
             <h2>按毒性特征筛选化合物</h2>
             <div class="search-container">
-                <form action="/toxicity_result" method="GET">
+                <form action="/toxicity_result" method="GET" id="toxicityForm">
                     <div style="margin-bottom: 20px;">
                         <label for="search_keyword" style="display: block; margin-bottom: 10px; font-size: 18px;">搜索毒性特征：</label>
                         <input type="text" id="search_keyword" placeholder="输入关键词进行搜索..." style="width: 100%; padding: 15px; font-size: 18px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box;">
                         
                         <label for="toxicity_field" style="display: block; margin-bottom: 10px; font-size: 18px;">选择毒性特征：</label>
-                        <select name="toxicity_field" id="toxicity_field" style="width: 100%; padding: 15px; font-size: 18px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box;">
+                        <select name="toxicity_field" id="toxicity_field" style="width: 100%; padding: 15px; font-size: 18px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box;" required>
                             <option value="ToxCast_Tox21_Assay">ToxCast & Tox21 Assay</option>
                             <option value="Ecotoxicity_LC50DM">Ecotoxicity - LC50DM</option>
                             <option value="Ecotoxicity_LC50">Ecotoxicity - LC50</option>
@@ -181,7 +217,11 @@
                             <option value="Acute_Toxicity_mouse_parenteral_LD50">Acute Toxicity - Mouse Parenteral LD50</option>
                         </select>
                     </div>
-                    <button type="submit">筛选</button>
+                    <button type="submit" id="filterButton">筛选</button>
+                    <div class="loading-spinner" id="loadingSpinner">
+                        <div class="spinner"></div>
+                        <div class="loading-text">正在筛选毒性数据...</div>
+                    </div>
                 </form>
                 
                 <div class="search-tips">
@@ -231,6 +271,51 @@
                             selectElement.selectedIndex = 0;
                         }
                     });
+                });
+                </script>
+                
+                <script>
+                function showLoading() {
+                    const filterButton = document.getElementById('filterButton');
+                    const loadingSpinner = document.getElementById('loadingSpinner');
+                    
+                    filterButton.style.display = 'none';
+                    loadingSpinner.style.display = 'block';
+                    loadingSpinner.classList.add('fade-in');
+                }
+                
+                function hideLoading() {
+                    const filterButton = document.getElementById('filterButton');
+                    const loadingSpinner = document.getElementById('loadingSpinner');
+                    
+                    loadingSpinner.style.display = 'none';
+                    filterButton.style.display = 'block';
+                    filterButton.disabled = false;
+                    filterButton.textContent = '筛选';
+                }
+                
+                document.getElementById('toxicityForm').addEventListener('submit', function(e) {
+                    const toxicityField = document.getElementById('toxicity_field').value;
+                    
+                    if (!toxicityField) {
+                        e.preventDefault();
+                        alert('请选择一个毒性特征');
+                        return false;
+                    }
+                    
+                    showLoading();
+                });
+                
+                // 页面加载完成后的处理
+                window.addEventListener('load', function() {
+                    hideLoading();
+                });
+                
+                // 处理浏览器返回按钮
+                window.addEventListener('pageshow', function(event) {
+                    if (event.persisted) {
+                        hideLoading();
+                    }
                 });
                 </script>
             </div>
